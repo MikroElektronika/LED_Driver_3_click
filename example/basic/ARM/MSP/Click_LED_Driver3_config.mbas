@@ -1,0 +1,8 @@
+module Click_LED_Driver3_config
+
+include Click_LED_Driver3_types
+
+const
+    _LEDDRIVER3_I2C_CFG as uint32_t[1] = (100000)
+    
+end.

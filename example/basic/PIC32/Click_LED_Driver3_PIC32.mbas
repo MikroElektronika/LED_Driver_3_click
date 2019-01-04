@@ -1,0 +1,66 @@
+'
+'Example for LED_Driver3 Click
+'
+'    Date          : Jan 2018.
+'    Author        : MikroE Team
+'
+'Test configuration PIC32 :
+'    
+'    MCU                : P32MX795F512L
+'    Dev. Board         : EasyPIC Fusion v7
+'    PIC32 Compiler ver : v4.0.0.0
+'
+'---
+'
+'Description :
+'
+'The application is composed of three sections :
+'
+'- System Initialization - Initializes I2C module
+'- Application Initialization - Driver initialize
+'- Application Task - (code snippet) - Changes color and intensity of light
+'
+'
+program Click_LED_Driver3_PIC32
+
+include Click_LED_Driver3_types
+include Click_LED_Driver3_config
+
+sub procedure systemInit() 
+
+    mikrobus_i2cInit(_MIKROBUS1, @_LEDDRIVER3_I2C_CFG[0]) 
+    Delay_ms(100) 
+
+end sub
+
+sub procedure applicationInit() 
+
+    leddriver3_i2cDriverInit(T_LEDDRIVER3_P(@_MIKROBUS1_GPIO), T_LEDDRIVER3_P(@_MIKROBUS1_I2C), 0x38) 
+
+end sub
+
+sub procedure applicationTask() 
+
+    leddriver3_setIntensity((_LEDDRIVER3_INCREMENT or _LEDDRIVER3_INTENSITY_8)) 
+    leddriver3_setTimer((_LEDDRIVER3_TIMER_8ms or _LEDDRIVER3_TIMER_16ms)) ' 24 ms
+    leddriver3_setColor(_LEDDRIVER3_COLOR_RED) 
+    Delay_1sec() 
+    leddriver3_setIntensity((_LEDDRIVER3_CONSTANT or _LEDDRIVER3_INTENSITY_16)) 
+    leddriver3_setColor(_LEDDRIVER3_COLOR_YELLOW) 
+    Delay_1sec() 
+    leddriver3_setColor(_LEDDRIVER3_COLOR_BLUE) 
+    Delay_1sec() 
+    leddriver3_setRGB_Color(0x40, 0x7F, 0x80) 
+    Delay_1sec() 
+
+end sub
+
+main :
+
+    systemInit() 
+    applicationInit() 
+    while (1) 
+        applicationTask() 
+    wend
+
+end.
